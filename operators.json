@@ -67,7 +67,7 @@
   "solis":{"side":"defender","roles":["intel","support"],"maps":["oregon","border","consulate"],"meta_score":78,"utility_score":80,"ease_score":78,"map_bonus":["consulate"]},
   "thorn":{"side":"defender","roles":["utility","support"],"maps":["oregon","villa","clubhouse"],"meta_score":82,"utility_score":80,"ease_score":78,"map_bonus":["villa"]},
   "thunderbird":{"side":"defender","roles":["support","utility"],"maps":["oregon","consulate","villa"],"meta_score":82,"utility_score":80,"ease_score":78,"map_bonus":["consulate"]},
-  "tubarão":{"side":"defender","roles":["roamer","intel"],"maps":["oregon","border","kafe dostoyevsky"],"meta_score":75,"utility_score":78,"ease_score":74,"map_bonus":["border"]},
+  "tubarao":{"side":"defender","roles":["roamer","intel"],"maps":["oregon","border","kafe dostoyevsky"],"meta_score":75,"utility_score":78,"ease_score":74,"map_bonus":["border"]},
   "valkyrie":{"side":"defender","roles":["intel","support"],"maps":["coastline","villa","chalet"],"meta_score":90,"utility_score":90,"ease_score":82,"map_bonus":["coastline"]},
   "vigil":{"side":"defender","roles":["roamer","anti intel"],"maps":["oregon","villa","border"],"meta_score":85,"utility_score":75,"ease_score":85,"map_bonus":["villa"]},
   "wamai":{"side":"defender","roles":["utility","anti gadget"],"maps":["oregon","border","clubhouse"],"meta_score":85,"utility_score":80,"ease_score":78,"map_bonus":["clubhouse"]},
