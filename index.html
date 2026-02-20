@@ -110,15 +110,21 @@ fetch('operators.json')
 
 // Populate map options dynamically
 function populateMaps(){
-  const maps = new Set();
-  Object.values(operatorsData).forEach(op => op.map_bonus.forEach(m => maps.add(m.toLowerCase())));
+  const allMaps = [
+    'bank', 'border', 'chalet', 'clubhouse', 'coastline', 'consulate',
+    'favela', 'fortress', 'house', 'kafe', 'kanal', 'oregon', 'outback',
+    'plane', 'skyscraper', 'villa'
+  ];
+
   const mapSelect = document.getElementById('mapSelect');
-  maps.forEach(map => {
+  mapSelect.innerHTML = ''; // clear existing options
+  allMaps.forEach(map => {
     const opt = document.createElement('option');
     opt.value = map;
     opt.textContent = capitalize(map);
     mapSelect.appendChild(opt);
   });
+
   mapSelect.addEventListener('change', updateOperators);
 }
 
