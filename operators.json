@@ -62,7 +62,7 @@
   "oryx": {"side":"defender","roles":["roamer","utility"],"maps":["oregon","villa","clubhouse"],"meta_score":78,"utility_score":78,"ease_score":82,"map_bonus":["clubhouse"]},
   "pulse": {"side":"defender","roles":["intel","roamer"],"maps":["oregon","clubhouse","kafe dostoyevsky"],"meta_score":78,"utility_score":80,"ease_score":78,"map_bonus":["kafe dostoyevsky"]},
   "rook": {"side":"defender","roles":["anchor","support"],"maps":["oregon","clubhouse","consulate"],"meta_score":85,"utility_score":82,"ease_score":90,"map_bonus":["clubhouse"]},
-  "sokopos": {"side":"defender","roles":["utility","intel"],"maps":["oregon","villa","clubhouse"],"meta_score":78,"utility_score":80,"ease_score":78,"map_bonus":["villa"]},
+  "skopos": {"side":"defender","roles":["utility","intel"],"maps":["oregon","villa","clubhouse"],"meta_score":78,"utility_score":80,"ease_score":78,"map_bonus":["villa"]},
   "smoke": {"side":"defender","roles":["anchor","site denial"],"maps":["oregon","kafe dostoyevsky","clubhouse"],"meta_score":82,"utility_score":88,"ease_score":74,"map_bonus":["kafe dostoyevsky"]},
   "solis": {"side":"defender","roles":["intel","support"],"maps":["oregon","border","consulate"],"meta_score":78,"utility_score":80,"ease_score":78,"map_bonus":["consulate"]},
   "thorn": {"side":"defender","roles":["utility","support"],"maps":["oregon","villa","clubhouse"],"meta_score":82,"utility_score":80,"ease_score":78,"map_bonus":["villa"]},
