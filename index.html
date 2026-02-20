@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>R6 Operator Picker</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: #1b1b1b;
+    color: #eee;
+    text-align: center;
+    margin: 0;
+    padding: 20px;
+  }
+
+  h1 {
+    margin-bottom: 20px;
+    color: #ff4c4c;
+  }
+
+  select, button {
+    padding: 10px;
+    margin: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: none;
+  }
+
+  .operators-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  .operator {
+    cursor: pointer;
+    border: 2px solid transparent;
+    border-radius: 8px;
+    transition: 0.2s;
+    width: 80px;
+  }
+
+  .operator.selected {
+    border: 2px solid #00ff00;
+  }
+
+  .operator img {
+    width: 100%;
+    border-radius: 8px;
+  }
+
+  .recommendations {
+    margin-top: 30px;
+  }
+
+  .rec {
+    background: #2b2b2b;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 8px;
+    display: inline-block;
+    width: 220px;
+    text-align: left;
+  }
+
+  .rec img {
+    width: 50px;
+    vertical-align: middle;
+    margin-right: 10px;
+  }
+</style>
+</head>
+<body>
+
+<h1>R6 Operator Picker</h1>
+
+<div>
+  <label>Map: </label>
+  <select id="mapSelect"></select>
+</div>
+
+<div>
+  <label>Side: </label>
+  <select id="sideSelect">
+    <option value="attacker">Attacker</option>
+    <option value="defender">Defender</option>
+  </select>
+</div>
+
+<div class="operators-grid" id="operatorsGrid"></div>
+
+<div class="recommendations" id="recommendations"></div>
+
+<script>
+let operatorsData;
+let selectedOperators = [];
+const topCount = 3;
+
+// Load JSON
+fetch('operators.json')
+  .then(res => res.json())
+  .then(data => {
+    operatorsData = data;
+    populateMaps();
+    updateOperators();
+  });
+
+// Populate map options dynamically
+function populateMaps(){
+  const maps = new Set();
+  Object.values(operatorsData).forEach(op => op.map_bonus.forEach(m => maps.add(m.toLowerCase())));
+  const mapSelect = document.getElementById('mapSelect');
+  maps.forEach(map => {
+    const opt = document.createElement('option');
+    opt.value = map;
+    opt.textContent = capitalize(map);
+    mapSelect.appendChild(opt);
+  });
+  mapSelect.addEventListener('change', updateOperators);
+}
+
+document.getElementById('sideSelect').addEventListener('change', updateOperators);
+
+function updateOperators(){
+  selectedOperators = [];
+  document.getElementById('recommendations').innerHTML = '';
+  const grid = document.getElementById('operatorsGrid');
+  grid.innerHTML = '';
+  const side = document.getElementById('sideSelect').value;
+
+  // Sort operators in desired order (custom array can replace Object.keys)
+  Object.keys(operatorsData)
+    .filter(opName => operatorsData[opName].side === side)
+    .forEach(opName => {
+      const op = operatorsData[opName];
+      const div = document.createElement('div');
+      div.className = 'operator';
+      div.innerHTML = `<img src="images/${opName}.png" alt="${opName}"><div>${capitalize(opName)}</div>`;
+      div.addEventListener('click', () => toggleSelect(opName, div));
+      grid.appendChild(div);
+    });
+}
+
+function toggleSelect(opName, div){
+  const index = selectedOperators.indexOf(opName);
+  if(index > -1){
+    selectedOperators.splice(index, 1);
+    div.classList.remove('selected');
+  } else if(selectedOperators.length < 5){
+    selectedOperators.push(opName);
+    div.classList.add('selected');
+  }
+  if(selectedOperators.length > 0){
+    showRecommendations();
+  } else {
+    document.getElementById('recommendations').innerHTML = '';
+  }
+}
+
+function showRecommendations(){
+  const map = document.getElementById('mapSelect').value;
+  const side = document.getElementById('sideSelect').value;
+  const recDiv = document.getElementById('recommendations');
+  recDiv.innerHTML = '<h2>Top Recommendations</h2>';
+
+  const candidates = Object.entries(operatorsData)
+    .filter(([name, op]) => op.side === side && !selectedOperators.includes(name))
+    .map(([name, op]) => {
+      let score = op.meta_score*0.4 + op.utility_score*0.4 + op.ease_score*0.2;
+      if(op.map_bonus.map(m => m.toLowerCase()).includes(map)) score += 5;
+
+      // Penalize duplicate roles
+      selectedOperators.forEach(sel => {
+        const selOp = operatorsData[sel];
+        op.roles.forEach(role => {
+          if(selOp.roles.includes(role)) score -= 5;
+        });
+      });
+
+      return {...op, name, score};
+    });
+
+  candidates.sort((a,b)=>b.score - a.score);
+  const top = candidates.slice(0, topCount);
+
+  top.forEach(op=>{
+    const div = document.createElement('div');
+    div.className = 'rec';
+    div.innerHTML = `
+      <img src="images/${op.name}.png" alt="${op.name}">
+      <strong>${capitalize(op.name)}</strong><br>
+      Score: ${op.score.toFixed(1)}<br>
+      Meta: ${op.meta_score}, Utility: ${op.utility_score}, Ease: ${op.ease_score}<br>
+      Map Bonus: ${op.map_bonus.join(', ')}
+    `;
+    recDiv.appendChild(div);
+  });
+}
+
+function capitalize(str){
+  if(!str) return str;
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+</script>
+
+</body>
+</html>
